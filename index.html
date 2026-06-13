@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lenient Tree | Design. Rebellion. Impact.</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Break the rules. Redefine the future. Join our creative design internship at Lenient Tree and design for a better tomorrow with rebellion.">
+  <meta name="keywords"
+    content="Lenient Tree, Design Agency, Creative Internship, UI/UX Design, Cyberpunk Design, Rebellion Design">
+
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hotPink: '#FF007F',
+            neonPurple: '#A020F0',
+            bloodRed: '#B3001B',
+            darkBlack: '#000000',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['"Bebas Neue"', 'sans-serif'],
+            dirt: ['"Rubik Dirt"', 'cursive'],
+            marker: ['"Permanent Marker"', 'cursive'],
+            sedgwick: ['"Sedgwick Ave Display"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-black text-white selection:bg-hotPink selection:text-black min-h-screen relative overflow-x-hidden">
+
+  <!-- SVG Stencil/Grunge Filters -->
+  <svg class="hidden" width="0" height="0">
+    <defs>
+      <!-- Distress Stamp Filter -->
+      <filter id="distress-stamp">
+        <feTurbulence type="fractalNoise" baseFrequency="0.16" numOctaves="4" result="noise" />
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -9.5" result="mask" />
+        <feComposite operator="out" in="SourceGraphic" in2="mask" />
+      </filter>
+      <!-- Spray Drip Filter -->
+      <filter id="spray-drip">
+        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -4.5" result="distress" />
+        <feGaussianBlur stdDeviation="0.6" result="blur" />
+        <feComposite operator="in" in2="SourceGraphic" in="distress" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Grain Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Interactive Cursor Tracker Glow -->
+  <div id="mouse-glow"></div>
+
+  <!-- Floating Particles Canvas Background -->
+  <canvas id="particles-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav
+    class="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center space-x-3 group z-10" id="nav-logo">
+        <div class="relative w-8 h-8 flex items-center justify-center">
+          <!-- Geometric Circle L Logo -->
+          <svg class="w-8 h-8 text-white transition-transform duration-500 group-hover:rotate-180" viewBox="0 0 100 100"
+            fill="none" stroke="currentColor" stroke-width="6">
+            <circle cx="50" cy="50" r="42" stroke="currentColor" />
+            <path d="M40 20 L40 80 L80 80" stroke="#FF007F" stroke-width="8" stroke-linejoin="round"
+              stroke-linecap="square" />
+          </svg>
+        </div>
+        <span
+          class="font-heading text-2xl tracking-widest text-white group-hover:text-hotPink transition-colors duration-300">
+          LENIENT TREE
+        </span>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home"
+          class="font-heading text-lg tracking-widest text-hotPink hover:text-white transition-colors duration-300 hover:text-glow-pink">HOME</a>
+        <a href="#about"
+          class="font-heading text-lg tracking-widest text-white/70 hover:text-hotPink hover:text-glow-pink transition-colors duration-300">ABOUT</a>
+        <a href="#focus"
+          class="font-heading text-lg tracking-widest text-white/70 hover:text-hotPink hover:text-glow-pink transition-colors duration-300">INTERNSHIP</a>
+        <a href="#why"
+          class="font-heading text-lg tracking-widest text-white/70 hover:text-hotPink hover:text-glow-pink transition-colors duration-300">MENTORS</a>
+        <a href="#quote"
+          class="font-heading text-lg tracking-widest text-white/70 hover:text-hotPink hover:text-glow-pink transition-colors duration-300">WORK</a>
+        <a href="#contact"
+          class="font-heading text-lg tracking-widest text-white/70 hover:text-hotPink hover:text-glow-pink transition-colors duration-300">CONTACT</a>
+      </div>
+
+      <!-- Action Button -->
+      <div class="hidden md:block">
+        <button
+          class="apply-btn btn-brush-pink px-6 py-2.5 text-lg font-heading tracking-widest hover:text-glow-pink transition-transform active:scale-95">
+          APPLY NOW
+        </button>
+      </div>
+
+      <!-- Mobile Menu Hamburger -->
+      <button class="md:hidden flex flex-col space-y-1.5 focus:outline-none z-50 group" id="mobile-menu-toggle"
+        aria-label="Toggle Navigation">
+        <span class="w-6 h-0.5 bg-white group-hover:bg-hotPink transition-all duration-300"></span>
+        <span class="w-6 h-0.5 bg-white group-hover:bg-hotPink transition-all duration-300"></span>
+        <span class="w-6 h-0.5 bg-white group-hover:bg-hotPink transition-all duration-300"></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Overlay -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-black/95 flex-col justify-center items-center space-y-6 hidden">
+    <a href="#home" class="mobile-link font-heading text-3xl tracking-widest text-hotPink">HOME</a>
+    <a href="#about" class="mobile-link font-heading text-3xl tracking-widest text-white hover:text-hotPink">ABOUT</a>
+    <a href="#focus"
+      class="mobile-link font-heading text-3xl tracking-widest text-white hover:text-hotPink">INTERNSHIP</a>
+    <a href="#why" class="mobile-link font-heading text-3xl tracking-widest text-white hover:text-hotPink">MENTORS</a>
+    <a href="#quote" class="mobile-link font-heading text-3xl tracking-widest text-white hover:text-hotPink">WORK</a>
+    <a href="#contact"
+      class="mobile-link font-heading text-3xl tracking-widest text-white hover:text-hotPink">CONTACT</a>
+    <button class="apply-btn btn-brush-pink px-8 py-3 text-2xl font-heading tracking-widest">
+      APPLY NOW
+    </button>
+  </div>
+
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <header id="home"
+    class="relative min-h-screen pt-32 pb-20 px-6 flex items-center overflow-hidden z-10 bg-cover bg-center before:content-[''] before:absolute before:inset-0 before:bg-black/35 before:z-0"
+    style="background-image: url('hero-bg-v2.jpg');">
+
+    <!-- Giant Glowing Red L in Background (Aligned exactly in center-right where the gears are) -->
+    <div class="absolute top-[45%] left-[60%] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 select-none">
+      <svg
+        class="w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[680px] lg:h-[680px] filter blur-[0.5px] float-element"
+        viewBox="0 0 100 100" fill="none">
+        <!-- Thick block L with paint strokes, drops and drips -->
+        <g fill="#B3001B" class="drop-shadow-[0_0_20px_rgba(179,0,27,0.7)]">
+          <!-- Vertical main stem -->
+          <path d="M52 14 L68 14 L68 68 L84 68 L84 82 L52 82 Z" />
+          <!-- Distress paint strokes inside the L -->
+          <path d="M55 16 L55 80" stroke="#FF007F" stroke-width="1.8" opacity="0.35" />
+          <path d="M65 16 L65 66" stroke="#FF007F" stroke-width="1.5" opacity="0.25" />
+          <path d="M54 79 L82 79" stroke="#FF007F" stroke-width="1.8" opacity="0.35" />
+          <!-- Paint splatter dots and drips -->
+          <circle cx="58" cy="86" r="1.5" />
+          <circle cx="64" cy="88" r="1.2" />
+          <circle cx="76" cy="85" r="1" />
+          <circle cx="85" cy="74" r="1.5" />
+          <circle cx="88" cy="77" r="1" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Purple Glow Fog Backdrop (Subtle addition for extra blending) -->
+    <div
+      class="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full bg-neonPurple/5 filter blur-[100px] pointer-events-none z-0">
+    </div>
+    <div
+      class="absolute bottom-10 left-1/4 w-[350px] h-[350px] rounded-full bg-hotPink/5 filter blur-[90px] pointer-events-none z-0">
+    </div>
+
+    <!-- Split Layout Grid Container -->
+    <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+
+      <!-- Left Hero Text Details -->
+      <div class="lg:col-span-7 space-y-8 text-left">
+
+        <!-- Three-tiered Typography Headings matching reference image -->
+        <h1 class="space-y-3 flex flex-col">
+          <span
+            class="font-heading distressed-stamp text-white text-5xl sm:text-7xl xl:text-8xl tracking-widest leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.3)]">
+            YOU'D BE ARRESTED
+          </span>
+          <span
+            class="font-sedgwick text-neonPurple text-3xl sm:text-5xl xl:text-6xl tracking-wide font-bold italic leading-none pl-4 text-glow-purple select-none transform -rotate-1 skew-x-3 duration-300 hover:scale-105 inline-block">
+            if you behaved like
+          </span>
+          <span
+            class="font-heading dripping-spray text-hotPink text-6xl sm:text-8xl xl:text-9xl tracking-widest font-black leading-none text-glow-pink drop-shadow-[0_6px_15px_rgba(255,0,127,0.8)]">
+            GOVERNMENT
+          </span>
+        </h1>
+
+        <!-- Hero Subtext Description -->
+        <p class="text-zinc-400 font-sans text-base sm:text-lg max-w-xl leading-relaxed">
+          Break the rules. Redefine the future.<br>
+          Join our Design Internship and create impact with rebellion.
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-wrap items-center gap-6 pt-4">
+          <button
+            class="apply-btn btn-brush-pink px-8 py-3.5 text-xl font-heading tracking-widest hover:scale-105 transition-transform active:scale-95">
+            APPLY NOW
+          </button>
+
+          <a href="#focus"
+            class="group flex items-center space-x-2 text-white font-heading text-lg tracking-wider border-b-2 border-white/20 hover:border-white py-1 transition-all duration-300">
+            <span>LEARN MORE</span>
+            <span class="transform group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Right Graphic Overlay Column Spacer (Leaves space for the background punk stencil artwork to shine) -->
+      <div
+        class="lg:col-span-5 relative w-full h-[380px] sm:h-[480px] lg:h-[550px] flex items-center justify-center overflow-visible pointer-events-none">
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ==================== FEATURES BAR ==================== -->
+  <section class="relative bg-black border-y border-hotPink/25 py-8 px-6 z-10">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:justify-between">
+
+      <!-- Feature Item 1 -->
+      <div class="flex items-center space-x-3 group cursor-default">
+        <div
+          class="text-neonPurple group-hover:text-hotPink transition-colors duration-300 transform group-hover:scale-110">
+          <!-- Anarchy Layers SVG -->
+          <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7" />
+            <polyline points="2 17 12 22 22 17" />
+            <polyline points="2 12 12 17 22 12" />
+          </svg>
+        </div>
+        <span
+          class="font-heading text-lg tracking-wider text-white group-hover:text-glow-pink transition-colors duration-300">
+          HANDS-ON PROJECTS
+        </span>
+      </div>
+
+      <!-- Divider line on desktops -->
+      <div class="hidden lg:block w-px h-8 bg-zinc-800"></div>
+
+      <!-- Feature Item 2 -->
+      <div class="flex items-center space-x-3 group cursor-default">
+        <div
+          class="text-neonPurple group-hover:text-hotPink transition-colors duration-300 transform group-hover:scale-110">
+          <!-- Mentors SVG -->
+          <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+        </div>
+        <span
+          class="font-heading text-lg tracking-wider text-white group-hover:text-glow-pink transition-colors duration-300">
+          MENTORED BY INDUSTRY EXPERTS
+        </span>
+      </div>
+
+      <!-- Divider line on desktops -->
+      <div class="hidden lg:block w-px h-8 bg-zinc-800"></div>
+
+      <!-- Feature Item 3 -->
+      <div class="flex items-center space-x-3 group cursor-default">
+        <div
+          class="text-neonPurple group-hover:text-hotPink transition-colors duration-300 transform group-hover:scale-110">
+          <!-- Fist / Case SVG -->
+          <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+          </svg>
+        </div>
+        <span
+          class="font-heading text-lg tracking-wider text-white group-hover:text-glow-pink transition-colors duration-300">
+          REAL-WORLD EXPERIENCE
+        </span>
+      </div>
+
+      <!-- Divider line on desktops -->
+      <div class="hidden lg:block w-px h-8 bg-zinc-800"></div>
+
+      <!-- Feature Item 4 -->
+      <div class="flex items-center space-x-3 group cursor-default">
+        <div
+          class="text-neonPurple group-hover:text-hotPink transition-colors duration-300 transform group-hover:scale-110">
+          <!-- Lightbulb SVG -->
+          <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5 5 0 0 0 8 8c0 1 .4 2.5 1.5 3.5.7.8 1.3 1.5 1.5 2.5" />
+            <line x1="9" y1="18" x2="15" y2="18" />
+            <line x1="10" y1="22" x2="14" y2="22" />
+          </svg>
+        </div>
+        <span
+          class="font-heading text-lg tracking-wider text-white group-hover:text-glow-pink transition-colors duration-300">
+          CREATIVE FREEDOM
+        </span>
+      </div>
+
+      <!-- Divider line on desktops -->
+      <div class="hidden lg:block w-px h-8 bg-zinc-800"></div>
+
+      <!-- Feature Item 5 -->
+      <div class="flex items-center space-x-3 group cursor-default">
+        <div
+          class="text-neonPurple group-hover:text-hotPink transition-colors duration-300 transform group-hover:scale-110">
+          <!-- Star SVG -->
+          <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        </div>
+        <span
+          class="font-heading text-lg tracking-wider text-white group-hover:text-glow-pink transition-colors duration-300">
+          BUILD YOUR PORTFOLIO
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== FOCUS AREAS ==================== -->
+  <section id="focus" class="relative py-28 px-6 bg-black z-10 overflow-hidden">
+
+    <!-- Decorative Splash SVG in Background -->
+    <div class="absolute right-[-100px] top-[10%] opacity-20 pointer-events-none z-0">
+      <svg class="w-[500px] h-[300px] text-neonPurple" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M10,40 C30,30 40,10 60,25 C80,40 95,20 85,60 C75,100 50,85 30,90 C10,95 -10,80 10,40 Z"
+          filter="blur(40px)" />
+      </svg>
+    </div>
+
+    <!-- Container Grid -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+      <!-- Left Stack Title Details -->
+      <div class="lg:col-span-4 lg:sticky lg:top-28 space-y-6 reveal">
+        <h2 class="flex flex-col font-dirt text-white text-5xl sm:text-6xl tracking-widest leading-none">
+          <span>INTERNSHIP</span>
+          <span class="text-hotPink text-glow-pink mt-2">FOCUS AREAS</span>
+        </h2>
+        <div class="h-1 w-20 bg-hotPink"></div>
+        <p class="text-zinc-500 font-sans text-sm sm:text-base max-w-xs leading-relaxed">
+          We strip down standard boring curriculums and let you command actual visual projects across raw channels.
+        </p>
+      </div>
+
+      <!-- Right Focus Cards Grid (5-column stack or 2/3 flex grid layout) -->
+      <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+
+        <!-- Card 1: Visual Design -->
+        <div class="cyber-card p-8 flex flex-col justify-between h-[280px] reveal">
+          <div class="space-y-4">
+            <div class="text-hotPink">
+              <!-- Monitor Icon -->
+              <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+                <!-- Cyber elements inner monitor -->
+                <path d="M6 8l3 3-3 3" />
+                <rect x="11" y="12" width="6" height="2" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-2xl tracking-widest text-white mt-4">
+              VISUAL DESIGN
+            </h3>
+            <p class="text-zinc-400 text-xs sm:text-sm font-sans">
+              Learn advanced graphics, stencil arts, spray layouts, and punk compositions.
+            </p>
+          </div>
+          <div class="flex justify-between items-center text-xs tracking-widest font-heading text-hotPink pt-4">
+            <span>MODULE 01</span>
+            <span>[CRASH]</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Branding & Identity -->
+        <div class="cyber-card p-8 flex flex-col justify-between h-[280px] reveal">
+          <div class="space-y-4">
+            <div class="text-hotPink">
+              <!-- Anarchy Circle Logo -->
+              <svg class="w-12 h-12" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4">
+                <circle cx="50" cy="50" r="38" />
+                <path d="M50 20 L25 80 L75 80 Z" stroke-width="5" />
+                <line x1="20" y1="60" x2="80" y2="60" stroke-width="5" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-2xl tracking-widest text-white mt-4">
+              BRANDING & IDENTITY
+            </h3>
+            <p class="text-zinc-400 text-xs sm:text-sm font-sans">
+              Craft corporate anti-heroes and build identity packages that command eyes.
+            </p>
+          </div>
+          <div class="flex justify-between items-center text-xs tracking-widest font-heading text-hotPink pt-4">
+            <span>MODULE 02</span>
+            <span>[REDEFINE]</span>
+          </div>
+        </div>
+
+        <!-- Card 3: UI/UX Design -->
+        <div class="cyber-card p-8 flex flex-col justify-between h-[280px] reveal">
+          <div class="space-y-4">
+            <div class="text-hotPink">
+              <!-- Rock hand SVG outline -->
+              <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Rock hand fingers -->
+                <path d="M18 10v4M6 10v4M10 8v6M14 8v6" />
+                <path
+                  d="M6 14c0 3.3 2.7 6 6 6s6-2.7 6-6V9a2 2 0 0 0-4 0v2h-1V9a2 2 0 0 0-4 0v2h-1V9a2 2 0 0 0-4 0v5z" />
+                <path d="M4 14l2 1" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-2xl tracking-widest text-white mt-4">
+              UI/UX DESIGN
+            </h3>
+            <p class="text-zinc-400 text-xs sm:text-sm font-sans">
+              Establish dark interfaces, fluid cyberpunk flows, and rule-breaking layouts.
+            </p>
+          </div>
+          <div class="flex justify-between items-center text-xs tracking-widest font-heading text-hotPink pt-4">
+            <span>MODULE 03</span>
+            <span>[INTERFACE]</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Motion Graphics -->
+        <div class="cyber-card p-8 flex flex-col justify-between h-[280px] reveal">
+          <div class="space-y-4">
+            <div class="text-hotPink">
+              <!-- Spray Can Icon -->
+              <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="8" y="10" width="8" height="12" rx="1" />
+                <path d="M10 6h4v4h-4z" />
+                <path d="M12 3v3" />
+                <!-- Spray droplets -->
+                <circle cx="19" cy="4" r="1.5" fill="currentColor" />
+                <circle cx="17" cy="7" r="1" fill="currentColor" />
+                <circle cx="15" cy="5" r="0.8" fill="currentColor" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-2xl tracking-widest text-white mt-4">
+              MOTION GRAPHICS
+            </h3>
+            <p class="text-zinc-400 text-xs sm:text-sm font-sans">
+              Inject dynamic spray-paint animations, glitches, and heavy digital frames.
+            </p>
+          </div>
+          <div class="flex justify-between items-center text-xs tracking-widest font-heading text-hotPink pt-4">
+            <span>MODULE 04</span>
+            <span>[MOTION]</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Social Media Design -->
+        <div class="cyber-card p-8 flex flex-col justify-between h-[280px] reveal">
+          <div class="space-y-4">
+            <div class="text-hotPink">
+              <!-- Zap/Lightning Icon -->
+              <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-2xl tracking-widest text-white mt-4">
+              SOCIAL MEDIA DESIGN
+            </h3>
+            <p class="text-zinc-400 text-xs sm:text-sm font-sans">
+              Deploy raw and loud posters that stand out on any feed without mercy.
+            </p>
+          </div>
+          <div class="flex justify-between items-center text-xs tracking-widest font-heading text-hotPink pt-4">
+            <span>MODULE 05</span>
+            <span>[ATTACK]</span>
+          </div>
+        </div>
+
+        <!-- Static Text Card -->
+        <div
+          class="flex flex-col justify-center items-start p-8 border border-zinc-800 bg-zinc-950/20 h-[280px] reveal">
+          <p class="font-sedgwick text-white text-3xl leading-snug">
+            More than an internship.
+          </p>
+          <p class="font-marker text-hotPink text-glow-pink text-4xl mt-2">
+            It's a movement.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== WHY LENIENT TREE ==================== -->
+  <section id="about" class="relative py-28 px-6 bg-black/60 border-t border-zinc-900 z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+
+      <!-- Left Heading Stacks -->
+      <div class="lg:col-span-5 reveal">
+        <h2 class="font-dirt text-white text-5xl sm:text-7xl tracking-widest leading-none">
+          WHY<br><span class="text-hotPink text-glow-pink">LENIENT TREE?</span>
+        </h2>
+        <div class="mt-8 relative w-48 h-32 opacity-30 select-none pointer-events-none hidden lg:block">
+          <!-- Anarchy stencil graphic -->
+          <svg class="w-full h-full text-zinc-700" viewBox="0 0 100 100" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <line x1="10" y1="10" x2="90" y2="90" />
+            <line x1="90" y1="10" x2="100" y2="10" />
+            <path d="M10 90 L30 70 M70 30 L90 10" />
+            <circle cx="50" cy="50" r="25" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right Description and Lists -->
+      <div class="lg:col-span-7 space-y-10 reveal">
+
+        <!-- Manifesto paragraph block -->
+        <div class="space-y-4">
+          <p class="text-white font-heading text-3xl tracking-wide text-glow-pink">
+            WE DON'T JUST TEACH DESIGN.
+          </p>
+          <p class="text-zinc-400 font-sans text-lg leading-relaxed">
+            We build designers who challenge norms, question systems, and design for a better tomorrow. We believe code
+            and visual styling are weapons of expression. Let's make an impact.
+          </p>
+        </div>
+
+        <!-- Checklist grid items -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+
+          <div class="flex items-start space-x-3 group">
+            <div class="text-hotPink mt-1 flex-shrink-0">
+              <!-- Glowing Check Circle SVG -->
+              <svg class="w-6 h-6 text-glow-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-heading text-xl tracking-wider text-white group-hover:text-hotPink transition-colors">
+                CREATIVE & REBELLIOUS CULTURE
+              </h4>
+              <p class="text-zinc-500 text-sm font-sans mt-1">Zero micro-management. Maximum creative license.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3 group">
+            <div class="text-hotPink mt-1 flex-shrink-0">
+              <svg class="w-6 h-6 text-glow-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-heading text-xl tracking-wider text-white group-hover:text-hotPink transition-colors">
+                COLLABORATE ON LIVE PROJECTS
+              </h4>
+              <p class="text-zinc-500 text-sm font-sans mt-1">Ship works that reach millions of visual eyes globally.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3 group">
+            <div class="text-hotPink mt-1 flex-shrink-0">
+              <svg class="w-6 h-6 text-glow-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-heading text-xl tracking-wider text-white group-hover:text-hotPink transition-colors">
+                FLEXIBLE & REMOTE FRIENDLY
+              </h4>
+              <p class="text-zinc-500 text-sm font-sans mt-1">Work from your command center, anywhere, anytime.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3 group">
+            <div class="text-hotPink mt-1 flex-shrink-0">
+              <svg class="w-6 h-6 text-glow-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-heading text-xl tracking-wider text-white group-hover:text-hotPink transition-colors">
+                LEARN. UNLEARN. RELEARN.
+              </h4>
+              <p class="text-zinc-500 text-sm font-sans mt-1">Continuous evolution. Push borders on design systems.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== QUOTE BANNER ==================== -->
+  <section id="quote"
+    class="relative py-20 bg-zinc-950 border-y-2 border-dashed border-hotPink/20 z-10 overflow-hidden">
+
+    <!-- Anarchist Distressed Symbol Background (Left) -->
+    <div class="absolute left-10 top-1/2 -translate-y-1/2 opacity-20 pointer-events-none z-0">
+      <svg class="w-32 h-32 text-zinc-800" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+        <circle cx="50" cy="50" r="40" />
+        <path d="M50 15 L20 85 L80 85 Z" />
+        <line x1="15" y1="58" x2="85" y2="58" />
+      </svg>
+    </div>
+
+    <!-- Quote Contents Grid -->
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+
+      <!-- Big Quote -->
+      <div class="lg:col-span-8 text-left space-y-2 reveal">
+        <p class="font-marker text-white text-3xl sm:text-4xl xl:text-5xl tracking-wide leading-snug">
+          DESIGN IS NOT JUST WHAT IT LOOKS LIKE.
+        </p>
+        <p class="font-marker text-hotPink text-glow-pink text-4xl sm:text-5xl xl:text-6xl tracking-wide leading-snug">
+          DESIGN IS HOW IT REBELS.
+        </p>
+      </div>
+
+      <!-- Right Stencil Quote -->
+      <div class="lg:col-span-4 flex justify-start lg:justify-end reveal">
+        <div
+          class="border-4 border-double border-neonPurple/40 p-4 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+          <span class="text-glitch font-dirt text-3xl sm:text-4xl text-neonPurple tracking-widest text-glow-purple">
+            QUESTION EVERYTHING
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== CTA SECTION ==================== -->
+  <section id="contact" class="relative py-32 px-6 bg-black z-10 overflow-hidden text-center">
+
+    <!-- Giant spray paint splatter background effects -->
+    <div
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full bg-hotPink/5 filter blur-[120px] pointer-events-none z-0">
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-8 relative z-10 reveal">
+
+      <h2 class="font-dirt text-white text-5xl sm:text-7xl tracking-widest leading-none text-glow-pink">
+        READY TO BREAK THE RULES?
+      </h2>
+
+      <p class="text-zinc-400 font-sans text-base sm:text-lg max-w-md mx-auto leading-relaxed">
+        Apply for our Design Internship and be part of the rebellion. No degrees needed. Just wild concepts.
+      </p>
+
+      <div class="pt-6">
+        <button
+          class="apply-btn btn-brush-pink px-12 py-5 text-2xl font-heading tracking-widest hover:scale-105 active:scale-95 transition-transform">
+          APPLY NOW
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="relative bg-zinc-950 border-t border-white/5 py-16 px-6 z-10 overflow-hidden">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+
+      <!-- Left Bio Columns -->
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3">
+          <svg class="w-7 h-7 text-hotPink" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6">
+            <circle cx="50" cy="50" r="42" stroke="currentColor" />
+            <path d="M40 20 L40 80 L80 80" stroke="#FF007F" stroke-width="8" stroke-linejoin="round"
+              stroke-linecap="square" />
+          </svg>
+          <span class="font-heading text-2xl tracking-widest text-white">LENIENT TREE</span>
+        </div>
+        <p class="text-zinc-500 font-sans text-sm max-w-xs leading-relaxed">
+          Design. Rebellion. Impact.<br>
+          We challenge conventions and reconstruct identity layouts for the bold.
+        </p>
+      </div>
+
+      <!-- Center Links Column -->
+      <div class="space-y-4">
+        <h4 class="font-heading text-lg tracking-widest text-white/40">QUICK LINKS</h4>
+        <ul class="grid grid-cols-2 gap-2 text-sm text-zinc-400 font-sans">
+          <li><a href="#about" class="hover:text-hotPink transition-colors">About Us</a></li>
+          <li><a href="#focus" class="hover:text-hotPink transition-colors">Internship</a></li>
+          <li><a href="#why" class="hover:text-hotPink transition-colors">Mentors</a></li>
+          <li><a href="#quote" class="hover:text-hotPink transition-colors">Our Work</a></li>
+          <li><a href="#contact" class="hover:text-hotPink transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Right Social Media Icons Column -->
+      <div class="space-y-6">
+        <h4 class="font-heading text-lg tracking-widest text-white/40">FOLLOW THE REBELLION</h4>
+        <div class="flex items-center space-x-5">
+          <!-- Instagram -->
+          <a href="#" class="text-zinc-500 hover:text-hotPink transition-colors" aria-label="Instagram">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+          <!-- Behance -->
+          <a href="#" class="text-zinc-500 hover:text-hotPink transition-colors" aria-label="Behance">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M9 12h-3v-3h3v3zm0 4h-3v-3h3v3zm5-8h5v1h-5v-1zm1 3c0-2-1-3-3-3s-3 1-3 3 1 3 3 3 3-1 3-3zm-6-6h-4v12h4c3 0 4-1.5 4-3 0-1.2-.6-2.2-1.7-2.6.9-.4 1.7-1.2 1.7-2.4 0-1.8-1.2-4-4-4z" />
+            </svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="text-zinc-500 hover:text-hotPink transition-colors" aria-label="LinkedIn">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+              <rect x="2" y="9" width="4" height="12" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
+          </a>
+          <!-- Twitter -->
+          <a href="#" class="text-zinc-500 hover:text-hotPink transition-colors" aria-label="Twitter">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+            </svg>
+          </a>
+          <!-- Dribbble -->
+          <a href="#" class="text-zinc-500 hover:text-hotPink transition-colors" aria-label="Dribbble">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path
+                d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.49-11.05 1-11.6 8.56" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div
+      class="max-w-7xl mx-auto border-t border-white/5 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-zinc-600 font-sans">
+      <span>© 2026 LENIENT TREE. NO RIGHTS RESERVED. SHARE IT. STENCIL IT.</span>
+      <div class="flex items-center space-x-2 mt-4 sm:mt-0">
+        <span>POWERED BY</span>
+        <a href="#" class="font-heading text-sm text-zinc-400 tracking-wider flex items-center space-x-1">
+          <svg class="w-4 h-4 text-hotPink" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6">
+            <circle cx="50" cy="50" r="42" />
+            <path d="M40 20 L40 80 L80 80" stroke="#FF007F" stroke-width="8" stroke-linejoin="round"
+              stroke-linecap="square" />
+          </svg>
+          <span>LENIENT TREE</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ==================== APPLY MODAL ==================== -->
+  <div id="apply-modal" class="fixed inset-0 z-50 items-center justify-center hidden p-6">
+    <div class="cyber-corners border border-hotPink bg-black w-full max-w-lg p-8 space-y-6 relative box-glow-pink">
+
+      <!-- Close Button -->
+      <button id="close-modal" class="absolute top-4 right-4 text-zinc-400 hover:text-hotPink transition-colors">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Success Content (Hidden initially) -->
+      <div id="modal-success" class="hidden text-center space-y-4 py-8">
+        <div class="text-hotPink flex justify-center">
+          <svg class="w-20 h-20 text-glow-pink" fill="none" stroke="currentColor" stroke-width="1.5"
+            viewBox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h3 class="font-dirt text-2xl tracking-widest text-white">WELCOME TO THE UNDERGROUND</h3>
+        <p class="text-zinc-400 font-sans text-sm leading-relaxed">
+          We have registered your metadata. Our lead rebels are screening your design signal. Stand by for contact.
+        </p>
+      </div>
+
+      <!-- Form Content -->
+      <form id="apply-form" class="space-y-6">
+        <div class="space-y-2 text-left">
+          <h3 class="font-dirt text-2xl tracking-widest text-white text-glow-pink">INITIATE REBEL ENTRY</h3>
+          <p class="text-zinc-500 font-sans text-xs">Fill the input streams. Challenge the algorithms.</p>
+        </div>
+
+        <div class="space-y-4 text-left">
+          <div>
+            <label for="form-name" class="block font-heading text-sm tracking-wider text-zinc-400 mb-1">CALL SIGN /
+              NAME</label>
+            <input type="text" id="form-name" required
+              class="w-full bg-zinc-950 border border-zinc-800 focus:border-hotPink outline-none px-4 py-3 text-sm text-white font-sans transition-colors">
+          </div>
+
+          <div>
+            <label for="form-email" class="block font-heading text-sm tracking-wider text-zinc-400 mb-1">SIGNAL ENDPOINT
+              / EMAIL</label>
+            <input type="email" id="form-email" required
+              class="w-full bg-zinc-950 border border-zinc-800 focus:border-hotPink outline-none px-4 py-3 text-sm text-white font-sans transition-colors">
+          </div>
+
+          <div>
+            <label for="form-specialty" class="block font-heading text-sm tracking-wider text-zinc-400 mb-1">SPECIALIZED
+              REBEL MODULE</label>
+            <select id="form-specialty" required
+              class="w-full bg-zinc-950 border border-zinc-800 focus:border-hotPink outline-none px-4 py-3 text-sm text-zinc-400 font-sans transition-colors">
+              <option value="visual">Visual Design Stencil</option>
+              <option value="branding">Corporate Identity Anti-Hero</option>
+              <option value="uiux">Cyber Interface UI/UX</option>
+              <option value="motion">Glitch Motion Frames</option>
+              <option value="social">Feed Attack Graphics</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="form-portfolio" class="block font-heading text-sm tracking-wider text-zinc-400 mb-1">PORTFOLIO
+              URL / SIGNAL DECK</label>
+            <input type="url" id="form-portfolio" placeholder="https://..."
+              class="w-full bg-zinc-950 border border-zinc-800 focus:border-hotPink outline-none px-4 py-3 text-sm text-white font-sans transition-colors">
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit"
+            class="btn-brush-pink w-full py-4 text-xl font-heading tracking-widest transition-transform duration-200">
+            TRANSMIT REBELLION
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Logics -->
+  <script src="script.js"></script>
+
+  <!-- Mobile Navbar Open/Close Event Script (Inline fallback) -->
+  <script>
+    const burger = document.getElementById('mobile-menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const links = document.querySelectorAll('.mobile-link');
+    const navLogo = document.getElementById('nav-logo');
+
+    const toggleMenu = () => {
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('flex');
+      document.body.classList.toggle('overflow-hidden');
+    };
+
+    if (burger && menu) {
+      burger.addEventListener('click', toggleMenu);
+    }
+
+    links.forEach(l => {
+      l.addEventListener('click', () => {
+        if (!menu.classList.contains('hidden')) {
+          toggleMenu();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
